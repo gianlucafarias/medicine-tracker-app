@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router'
 import Colors from '@/constant/Colors'
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth'
 import { auth } from '@/config/FirebaseConfig'
+import { setLocalStorage } from '@/service/storage'
 
 
 
@@ -14,7 +15,7 @@ export default function signUp() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [name, setName] = useState('')
-
+    const [userName, setUserName] = useState('')
     const onCreateAccount = () => {
 
         if (!email || !password || !confirmPassword || !name) {
@@ -22,10 +23,10 @@ export default function signUp() {
             return
         }
         createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+        .then(async (userCredential) => {
       // Signed up 
       const user = userCredential.user;
-      console.log(user)
+      await setLocalStorage('user', user)
       router.push('/(tabs)')
       // ...
     })
